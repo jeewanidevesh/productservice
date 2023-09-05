@@ -5,6 +5,7 @@ import dev.devesh.productservice.models.Product;
 
 public interface ProductService {
 
+    GenericProductDto createProduct(GenericProductDto product);
     GenericProductDto getProductById(Long id);
 
 }
