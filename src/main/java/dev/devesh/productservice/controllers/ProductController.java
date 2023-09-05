@@ -1,5 +1,6 @@
 package dev.devesh.productservice.controllers;
 
+import dev.devesh.productservice.dtos.GenericProductDto;
 import dev.devesh.productservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -34,7 +35,7 @@ public class ProductController {
 
     //localhost:8080/products/123
     @GetMapping("{id}")
-    public String getProductById(@PathVariable("id") Long id){
+    public GenericProductDto getProductById(@PathVariable("id") Long id){
 
         return productService.getProductById(id);
     }
