@@ -2,12 +2,10 @@ package dev.devesh.productservice.controllers;
 
 import dev.devesh.productservice.dtos.GenericProductDto;
 import dev.devesh.productservice.services.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
+import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -28,9 +26,14 @@ public class ProductController {
 //        this.productService=productService;
 //    }
 
+    //GET/products{}
     @GetMapping
-    public void getAllProducts(){
+    public List<GenericProductDto> getAllProducts(){
 
+//        return List.of(new GenericProductDto(),
+//        new GenericProductDto());
+
+        return productService.getAllProducts();
     }
 
     //localhost:8080/products/123
