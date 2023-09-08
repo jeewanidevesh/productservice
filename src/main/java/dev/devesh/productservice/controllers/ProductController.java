@@ -1,8 +1,12 @@
 package dev.devesh.productservice.controllers;
 
+import dev.devesh.productservice.dtos.ExceptionDto;
 import dev.devesh.productservice.dtos.GenericProductDto;
+import dev.devesh.productservice.exceptions.NotFoundException;
 import dev.devesh.productservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,15 +42,25 @@ public class ProductController {
 
     //localhost:8080/products/123
     @GetMapping("{id}")
-    public GenericProductDto getProductById(@PathVariable("id") Long id){
+    public GenericProductDto getProductById(@PathVariable("id") Long id) throws NotFoundException {
 
         return productService.getProductById(id);
     }
 
     @DeleteMapping("{id}")
-    public void deleteProductById(){
+    public ResponseEntity<GenericProductDto> deleteProductById(@PathVariable("id")Long id) throws NotFoundException {
 
+        return new ResponseEntity<>(productService.deleteProduct(id), HttpStatus.OK);
+        //return productService.deleteProduct(id);
     }
+
+//    @ExceptionHandler(NotFoundException.class)
+//    private ResponseEntity<ExceptionDto> handleNotFoundException(NotFoundException notFoundException){
+//
+//        return new ResponseEntity(
+//                new ExceptionDto(HttpStatus.NOT_FOUND, notFoundException.getMessage()),HttpStatus.NOT_FOUND);
+////        System.out.println("Not found exception happened");
+//    }
 
     @PostMapping
     public GenericProductDto createProduct(@RequestBody GenericProductDto product){
