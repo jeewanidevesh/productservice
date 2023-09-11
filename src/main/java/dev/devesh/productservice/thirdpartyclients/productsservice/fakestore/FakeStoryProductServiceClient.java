@@ -3,6 +3,7 @@ package dev.devesh.productservice.thirdpartyclients.productsservice.fakestore;
 import dev.devesh.productservice.dtos.FakeStoreProductDto;
 import dev.devesh.productservice.dtos.GenericProductDto;
 import dev.devesh.productservice.exceptions.NotFoundException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -24,24 +25,33 @@ import java.util.List;
 public class FakeStoryProductServiceClient {
 
     private RestTemplateBuilder restTemplateBuilder;
-    private String specificProductRequestUrl ="https://fakestoreapi.com/products/{id}";
-    private String productRequestsBaseUrl ="https://fakestoreapi.com/products";
+//    private String specificProductRequestUrl ="https://fakestoreapi.com/products/{id}";
+//    private String productRequestsBaseUrl ="https://fakestoreapi.com/products";
+
+    @Value("${fakestore.api.url}")
+    private  String fakeStoreApiUrl;
+
+    @Value("${fakestore.api.paths.product}")
+    private String fakeStoreProductsApiPath;
+
+    private String specificProductRequestUrl =fakeStoreApiUrl+fakeStoreProductsApiPath+"/{id}";
+    private String productRequestsBaseUrl =fakeStoreApiUrl+fakeStoreProductsApiPath;
 
     public FakeStoryProductServiceClient(RestTemplateBuilder restTemplateBuilder){
         this.restTemplateBuilder=restTemplateBuilder;
     }
 
-    private GenericProductDto convertFakeStoreProductIntoGenericProduct(FakeStoreProductDto fakeStoreProductDto){
-        GenericProductDto product=new GenericProductDto();
-        product.setId(fakeStoreProductDto.getId());
-        product.setImage(fakeStoreProductDto.getImage());
-        product.setDescription(fakeStoreProductDto.getDescription());
-        product.setTitle(fakeStoreProductDto.getTitle());
-        product.setPrice(fakeStoreProductDto.getPrice());
-        product.setCategory(fakeStoreProductDto.getCategory());
-
-        return product;
-    }
+//    private GenericProductDto convertFakeStoreProductIntoGenericProduct(FakeStoreProductDto fakeStoreProductDto){
+//        GenericProductDto product=new GenericProductDto();
+//        product.setId(fakeStoreProductDto.getId());
+//        product.setImage(fakeStoreProductDto.getImage());
+//        product.setDescription(fakeStoreProductDto.getDescription());
+//        product.setTitle(fakeStoreProductDto.getTitle());
+//        product.setPrice(fakeStoreProductDto.getPrice());
+//        product.setCategory(fakeStoreProductDto.getCategory());
+//
+//        return product;
+//    }
 
     public FakeStoreProductDto createProduct(GenericProductDto product){
 
