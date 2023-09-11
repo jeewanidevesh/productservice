@@ -34,11 +34,15 @@ public class FakeStoryProductServiceClient {
     @Value("${fakestore.api.paths.product}")
     private String fakeStoreProductsApiPath;
 
-    private String specificProductRequestUrl =fakeStoreApiUrl+fakeStoreProductsApiPath+"/{id}";
-    private String productRequestsBaseUrl =fakeStoreApiUrl+fakeStoreProductsApiPath;
+    private String specificProductRequestUrl;// =fakeStoreApiUrl+fakeStoreProductsApiPath+"/{id}";
+    private String productRequestsBaseUrl;// =fakeStoreApiUrl+fakeStoreProductsApiPath;
 
-    public FakeStoryProductServiceClient(RestTemplateBuilder restTemplateBuilder){
-        this.restTemplateBuilder=restTemplateBuilder;
+    public FakeStoryProductServiceClient(RestTemplateBuilder restTemplateBuilder,
+                                         @Value("${fakestore.api.url}") String fakeStoreApiUrl,
+                                         @Value("${fakestore.api.paths.product}") String fakeStoreProductsApiPath) {
+        this.restTemplateBuilder = restTemplateBuilder;
+        this.productRequestsBaseUrl  = fakeStoreApiUrl + fakeStoreProductsApiPath;
+        this.specificProductRequestUrl = fakeStoreApiUrl + fakeStoreProductsApiPath + "/{id}";
     }
 
 //    private GenericProductDto convertFakeStoreProductIntoGenericProduct(FakeStoreProductDto fakeStoreProductDto){
