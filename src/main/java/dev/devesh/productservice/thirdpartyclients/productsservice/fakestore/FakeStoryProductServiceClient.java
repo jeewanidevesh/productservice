@@ -1,8 +1,8 @@
 package dev.devesh.productservice.thirdpartyclients.productsservice.fakestore;
 
+import dev.devesh.productservice.dtos.FakeStoreProductDto;
 import dev.devesh.productservice.dtos.GenericProductDto;
 import dev.devesh.productservice.exceptions.NotFoundException;
-import dev.devesh.productservice.thirdpartyclients.productsservice.ThirdPartyProductServiceClient;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
