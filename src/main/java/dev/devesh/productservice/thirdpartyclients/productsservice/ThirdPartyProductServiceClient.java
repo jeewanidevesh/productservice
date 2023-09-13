@@ -16,4 +16,5 @@ public interface ThirdPartyProductServiceClient {
     GenericProductDto getProductById(Long id) throws NotFoundException;
     List<GenericProductDto> getAllProducts();
     GenericProductDto deleteProduct(Long id) throws NotFoundException;
+    GenericProductDto updateProductById(Long id,GenericProductDto product);
 }

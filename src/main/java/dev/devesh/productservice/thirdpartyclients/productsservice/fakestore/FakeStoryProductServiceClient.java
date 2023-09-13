@@ -5,8 +5,7 @@ import dev.devesh.productservice.dtos.GenericProductDto;
 import dev.devesh.productservice.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.ResponseExtractor;
@@ -44,18 +43,6 @@ public class FakeStoryProductServiceClient {
         this.productRequestsBaseUrl  = fakeStoreApiUrl + fakeStoreProductsApiPath;
         this.specificProductRequestUrl = fakeStoreApiUrl + fakeStoreProductsApiPath + "/{id}";
     }
-
-//    private GenericProductDto convertFakeStoreProductIntoGenericProduct(FakeStoreProductDto fakeStoreProductDto){
-//        GenericProductDto product=new GenericProductDto();
-//        product.setId(fakeStoreProductDto.getId());
-//        product.setImage(fakeStoreProductDto.getImage());
-//        product.setDescription(fakeStoreProductDto.getDescription());
-//        product.setTitle(fakeStoreProductDto.getTitle());
-//        product.setPrice(fakeStoreProductDto.getPrice());
-//        product.setCategory(fakeStoreProductDto.getCategory());
-//
-//        return product;
-//    }
 
     public FakeStoreProductDto createProduct(GenericProductDto product){
 
@@ -110,5 +97,20 @@ public class FakeStoryProductServiceClient {
 
 
         return response.getBody();
+    }
+
+    public FakeStoreProductDto updateProductById(Long id, GenericProductDto product) {
+
+        String updateProductByIdRequest="https://fakestoreapi.com/products/{id}";
+        RestTemplate restTemplate=restTemplateBuilder.build();
+
+        HttpHeaders headers=new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<GenericProductDto> requestEntity=new HttpEntity<>(product,headers);
+
+        ResponseEntity<FakeStoreProductDto>  responseEntity=
+                restTemplate.exchange(
+                        updateProductByIdRequest,HttpMethod.PUT,requestEntity, FakeStoreProductDto.class,id);
+        return responseEntity.getBody();
     }
 }
