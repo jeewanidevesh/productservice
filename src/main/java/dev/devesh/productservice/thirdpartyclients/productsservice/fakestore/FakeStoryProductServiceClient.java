@@ -100,17 +100,31 @@ public class FakeStoryProductServiceClient {
     }
 
     public FakeStoreProductDto updateProductById(Long id, GenericProductDto product) {
-
-        //String updateProductRequestUrl="https://fakestoreapi.com/products/{id}";
+        /***
+         * This is second and simple method as taught in class
+         */
         RestTemplate restTemplate=restTemplateBuilder.build();
+        RequestCallback requestCallback=restTemplate.httpEntityCallback(product,GenericProductDto.class);
+        ResponseExtractor<ResponseEntity<FakeStoreProductDto>> responseExtractor=
+                restTemplate.responseEntityExtractor(FakeStoreProductDto.class);
+        ResponseEntity<FakeStoreProductDto> response=restTemplate.execute(
+                this.specificProductRequestUrl,HttpMethod.PUT,requestCallback,responseExtractor,id);
 
-        HttpHeaders headers=new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<GenericProductDto> requestEntity=new HttpEntity<>(product,headers);
-
-        ResponseEntity<FakeStoreProductDto>  responseEntity=
-                restTemplate.exchange(
-                        this.specificProductRequestUrl,HttpMethod.PUT,requestEntity, FakeStoreProductDto.class,id);
-        return responseEntity.getBody();
+        return response.getBody();
+        /***
+         *
+         * this is first method second method I wrote above
+         */
+//        //String updateProductRequestUrl="https://fakestoreapi.com/products/{id}";
+//        RestTemplate restTemplate=restTemplateBuilder.build();
+//
+//        HttpHeaders headers=new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_JSON);
+//        HttpEntity<GenericProductDto> requestEntity=new HttpEntity<>(product,headers);
+//
+//        ResponseEntity<FakeStoreProductDto>  responseEntity=
+//                restTemplate.exchange(
+//                        this.specificProductRequestUrl,HttpMethod.PUT,requestEntity, FakeStoreProductDto.class,id);
+//        return responseEntity.getBody();
     }
 }
