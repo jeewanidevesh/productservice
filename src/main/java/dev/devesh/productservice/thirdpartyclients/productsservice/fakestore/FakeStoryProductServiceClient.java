@@ -101,7 +101,7 @@ public class FakeStoryProductServiceClient {
 
     public FakeStoreProductDto updateProductById(Long id, GenericProductDto product) {
 
-        String updateProductByIdRequest="https://fakestoreapi.com/products/{id}";
+        //String updateProductRequestUrl="https://fakestoreapi.com/products/{id}";
         RestTemplate restTemplate=restTemplateBuilder.build();
 
         HttpHeaders headers=new HttpHeaders();
@@ -110,7 +110,7 @@ public class FakeStoryProductServiceClient {
 
         ResponseEntity<FakeStoreProductDto>  responseEntity=
                 restTemplate.exchange(
-                        updateProductByIdRequest,HttpMethod.PUT,requestEntity, FakeStoreProductDto.class,id);
+                        this.specificProductRequestUrl,HttpMethod.PUT,requestEntity, FakeStoreProductDto.class,id);
         return responseEntity.getBody();
     }
 }
