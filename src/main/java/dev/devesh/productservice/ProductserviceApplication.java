@@ -1,12 +1,15 @@
 package dev.devesh.productservice;
 
-import dev.devesh.productservice.inheritancedemo.singletable.Mentor;
-import dev.devesh.productservice.inheritancedemo.singletable.MentorRepository;
-import dev.devesh.productservice.inheritancedemo.singletable.User;
-import dev.devesh.productservice.inheritancedemo.singletable.UserRepository;
+import dev.devesh.productservice.inheritancedemo.joinedtable.MentorRepository;
+import dev.devesh.productservice.inheritancedemo.joinedtable.Mentor;
+import dev.devesh.productservice.inheritancedemo.joinedtable.User;
+import dev.devesh.productservice.inheritancedemo.joinedtable.UserRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.util.List;
 
 @SpringBootApplication
 public class ProductserviceApplication implements CommandLineRunner {
@@ -14,7 +17,8 @@ public class ProductserviceApplication implements CommandLineRunner {
     private MentorRepository mentorRepository;
     private UserRepository userRepository;
 
-    public ProductserviceApplication(MentorRepository mentorRepository,UserRepository userRepository) {
+    public ProductserviceApplication(@Qualifier("jt_mr") MentorRepository mentorRepository,
+                                     @Qualifier("jt_ur") UserRepository userRepository) {
         this.mentorRepository = mentorRepository;
         this.userRepository=userRepository;
     }
@@ -36,5 +40,10 @@ public class ProductserviceApplication implements CommandLineRunner {
         user.setEmail("sarath@gmail.com");
         userRepository.save(user);
 
+        List<User> users=userRepository.findAll();
+
+        for(User user1:users){
+            System.out.println(user1);
+        }
     }
 }
