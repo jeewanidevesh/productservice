@@ -1,8 +1,6 @@
 package dev.devesh.productservice.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -19,9 +17,11 @@ public class Product extends  BaseModel{
     // => L to R: 1 : 1
     // => R to L: m : 1
     // => Ans:    m : 1
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @JoinColumn(name = "category")
     private Category category;
-    @OneToOne
+
+    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     private Price price;
 
 
