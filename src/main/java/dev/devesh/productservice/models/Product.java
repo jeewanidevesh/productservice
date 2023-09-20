@@ -2,6 +2,7 @@ package dev.devesh.productservice.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.*;
 
 @Entity
@@ -20,7 +21,8 @@ public class Product extends  BaseModel{
     // => Ans:    m : 1
     @ManyToOne
     private Category category;
-    private double price;
+    @OneToOne
+    private Price price;
 
 
 }
