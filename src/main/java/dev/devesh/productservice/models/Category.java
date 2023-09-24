@@ -17,7 +17,7 @@ import java.util.List;
 public class Category extends BaseModel{
 
     private String name;
-    @OneToMany(mappedBy = "category")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "category")
     private List<Product> products=new ArrayList<>();
     // this is the same relation being mapped by category attribute in the other (Product) class
 }

@@ -8,12 +8,14 @@ import dev.devesh.productservice.models.Product;
 import dev.devesh.productservice.repositories.CategoryRepository;
 import dev.devesh.productservice.repositories.PriceRepository;
 import dev.devesh.productservice.repositories.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @SpringBootApplication
@@ -41,6 +43,7 @@ public class ProductserviceApplication {//implements CommandLineRunner {
         SpringApplication.run(ProductserviceApplication.class, args);
     }
 
+//    @Transactional
 //    @Override
 //    public void run(String... args) throws Exception {
 ////        Mentor mentor=new Mentor();
@@ -99,6 +102,31 @@ public class ProductserviceApplication {//implements CommandLineRunner {
 ////        }
 //
 //        List<Product> products1=productRepository.findAllByTitle("iPhone 15 Pro");
+//
+////        System.out.println("fetching category fae005e8-48c4-4e75-b82c-841a2481e3a4");
+////        Thread.sleep(1000);
+////
+////        Optional<Category> category1Optional=categoryRepository.findById(UUID.fromString("fae005e8-48c4-4e75-b82c-841a2481e3a4"));
+////
+////        Category category1=category1Optional.get();
+////        System.out.println("fetching product for category: ");
+////        Thread.sleep(1000);
+////        category1.getProducts();
+////        System.out.println("fetching category 881c96c2-b1de-472a-8aad-85e0a314219f");
+////        Thread.sleep(1000);
+////
+////        Optional<Category> category1Optional=categoryRepository.findById(UUID.fromString("881c96c2-b1de-472a-8aad-85e0a314219f"));
+////
+////        Category category1=category1Optional.get();
+////        System.out.println(category1);
+////        System.out.println("fetching product for category: ");
+////        Thread.sleep(1000);
+////        List<Product> products2=category1.getProducts();
+////        doSomething();
+//    }
+
+//    @Transactional
+//    public void doSomething()throws Exception{
 //
 //    }
 }

@@ -45,6 +45,6 @@ public interface ProductRepository
     List<Product> findAllByTitle(String title1);
 
 //    @Query("select Product from Product where Product.title= :title1")
-    @Query("select Product from Product where Product.price.currency=:currency and Product .title = :title1")
-    List<Product> readAllByTitle(String title1,String currency);
+//    @Query("select Product from Product where Product.price.currency=:currency and Product .title = :title1")
+//    List<Product> readAllByTitle(String title1,String currency);
 }
