@@ -1,13 +1,11 @@
 package dev.devesh.productservice.controllers;
 
+import dev.devesh.productservice.dtos.GetProductTitlesRequestDto;
 import dev.devesh.productservice.dtos.ProductDto;
 import dev.devesh.productservice.models.Category;
 import dev.devesh.productservice.models.Product;
 import dev.devesh.productservice.services.CategoryService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +36,14 @@ public class CategoryController {
 
         }
         return productDtos;
+    }
+
+    @GetMapping("/titles/")
+    public List<String> getProductTitles(@RequestBody GetProductTitlesRequestDto requestDto){
+
+        List<String> uuids=requestDto.getUuids();
+
+        return categoryService.getProductTitles(uuids);
     }
 
 }

@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,8 @@ import java.util.List;
 public class Category extends BaseModel{
 
     private String name;
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "category")
+    @OneToMany(mappedBy = "category")
+    @Fetch(FetchMode.SUBSELECT)
     private List<Product> products=new ArrayList<>();
     // this is the same relation being mapped by category attribute in the other (Product) class
 }

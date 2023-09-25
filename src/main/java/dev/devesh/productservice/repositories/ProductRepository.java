@@ -1,5 +1,6 @@
 package dev.devesh.productservice.repositories;
 
+import dev.devesh.productservice.models.Category;
 import dev.devesh.productservice.models.Product;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -35,6 +36,11 @@ public interface ProductRepository
     List<Product> findAllByTitleLike(String titleRegex);
 
     List<Product> readAllByTitleLike(String titleRegex);
+
+    List<Product> findAllByCategoryIn(List<Category> categories);
+
+    //    @Query("select Product from Product where  Product .category.uuid in:uuids")
+//    List<Product> findAllByCategoryIn(List<UUID> uuids);
 
 //    @Query(value = "select * from product where title = :title1",nativeQuery = true)
 //@Query(value = "select * from product.id join product_orders on product.id = product_orders.product_id where title = :title1",nativeQuery = true)

@@ -22,7 +22,8 @@ public class Product extends  BaseModel{
     @JoinColumn(name = "category")
     private Category category;
 
-    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinColumn
     private Price price;
 
 
