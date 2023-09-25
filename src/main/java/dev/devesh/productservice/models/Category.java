@@ -18,11 +18,26 @@ import java.util.List;
 @Entity
 public class Category extends BaseModel{
 
+//    private String name;
+//    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+//    @Fetch(FetchMode.SUBSELECT)
+//    private List<Product> products=new ArrayList<>();
+//    // this is the same relation being mapped by category attribute in the other (Product) class
+
+    @Column
     private String name;
-    @OneToMany(mappedBy = "category")
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     @Fetch(FetchMode.SUBSELECT)
-    private List<Product> products=new ArrayList<>();
-    // this is the same relation being mapped by category attribute in the other (Product) class
+    private List<Product> products;
+    public List<Product> getProducts() {
+        if (products == null) {
+            products = new ArrayList<>();
+        }
+        return products;
+    }
+
+
 }
 
 // class Group {

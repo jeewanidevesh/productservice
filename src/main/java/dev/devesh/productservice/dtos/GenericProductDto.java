@@ -1,6 +1,5 @@
 package dev.devesh.productservice.dtos;
 
-import dev.devesh.productservice.models.Category;
 import lombok.Getter;
 import lombok.Setter;
 

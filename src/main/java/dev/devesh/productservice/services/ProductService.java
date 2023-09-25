@@ -4,6 +4,7 @@ import dev.devesh.productservice.dtos.GenericProductDto;
 import dev.devesh.productservice.exceptions.NotFoundException;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface ProductService {
 
@@ -13,5 +14,7 @@ public interface ProductService {
     GenericProductDto deleteProduct(Long id) throws NotFoundException;
 
     GenericProductDto updateProductById(Long id,GenericProductDto product);
+
+
 
 }
