@@ -13,8 +13,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 //@Primary
@@ -72,7 +75,14 @@ public class SelfProductServiceImpl implements ProductServiceApis{
 
     @Override
     public List<ProductDto> getAllProducts() {
-        return null;
+        List<Product> products=productRepository.findAll().stream()
+                .collect(Collectors.toList());
+        List<ProductDto> productDtos=new ArrayList<>();
+
+        for(Product product: products){
+            productDtos.add(convertProductToGenericProductDto(product));
+        }
+        return productDtos;
     }
 
     @Override
@@ -87,12 +97,22 @@ public class SelfProductServiceImpl implements ProductServiceApis{
             return convertProductToGenericProductDto(product);
         }
         else{
-            throw new NotFoundException("Product with id "+ id+" not found!");
+            throw new NotFoundException("Product with id "+ id+" not found");
         }
     }
 
     @Override
-    public List<ProductDto> getProductsByCategory(String category) throws NotFoundException {
+    public List<ProductDto> getProductsByCategory(String categoryId) throws NotFoundException {
+        Optional<Category> categoryOptional=categoryRepository.findById(UUID.fromString(categoryId));
+
+        if(categoryOptional.isEmpty()){
+            return null;
+        }
+
+        Category category=categoryOptional.get();
+        List<ProductDto> productDtos=new ArrayList<>();
+
+
         return null;
     }
 
