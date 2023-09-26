@@ -41,6 +41,9 @@ public interface ProductRepository
     @Query(value = CustomQueries.FIND_ALL_PRODUCT_BY_CATEGORY)
     List<Product> getAllProductByCategory(String categoryName);
 
+    @Query(nativeQuery = true, value = CustomQueries.GET_ALL_PRODUCT_CATEGORY)
+    List<String> getAllProductCategory();
+
     //    @Query("select Product from Product where  Product .category.uuid in:uuids")
 //    List<Product> findAllByCategoryIn(List<UUID> uuids);
 

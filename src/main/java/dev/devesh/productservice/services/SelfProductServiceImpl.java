@@ -9,6 +9,7 @@ import dev.devesh.productservice.models.Price;
 import dev.devesh.productservice.models.Product;
 import dev.devesh.productservice.repositories.CategoryRepository;
 import dev.devesh.productservice.repositories.ProductRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-//@Primary
+@Primary
 @Service("selfProductServiceImpl")
 public class SelfProductServiceImpl implements ProductServiceApis{
 
@@ -87,7 +88,7 @@ public class SelfProductServiceImpl implements ProductServiceApis{
 
     @Override
     public List<String> getAllCategories() {
-        return null;
+        return productRepository.getAllProductCategory();
     }
 
     @Override
@@ -100,28 +101,86 @@ public class SelfProductServiceImpl implements ProductServiceApis{
             throw new NotFoundException("Product with id "+ id+" not found");
         }
     }
-
+    @Transactional
     @Override
     public List<ProductDto> getProductsByCategory(String categoryName) throws NotFoundException {
         List<Product> products=productRepository.getAllProductByCategory(categoryName);
 
+        if(products==null || products.isEmpty()){
+            throw new NotFoundException("Category " +categoryName+" Not found");
+        }
 
-
-        return null;
+        return products.stream().map(this::convertProductToGenericProductDto).collect(Collectors.toList());
     }
 
     @Override
     public ProductDto addonProduct(ProductDto productDto) {
-        return null;
+        Product product=convertProductDtoToProduct(productDto);
+        product=productRepository.save(product);
+        return convertProductToGenericProductDto(product);
     }
 
+    @Transactional
     @Override
     public ProductDto updateProduct(ProductDto productDto, String id) throws NotFoundException {
-        return null;
+        //retrieve the existing product by id
+        Optional<Product> optionalProduct=productRepository.findById(UUID.fromString(id));
+
+        if(optionalProduct.isPresent()){
+            Product existingProduct=optionalProduct.get();
+            //update the properties of product based on DTO
+            existingProduct.setTitle(productDto.getTitle());
+            existingProduct.setDescription(productDto.getDescription());
+
+            //update the product price
+            Price price=existingProduct.getPrice();
+
+            if(price==null){
+                price=new Price();
+            }
+            price.setCurrency(productDto.getCurrency());
+            price.setPrice(productDto.getPrice());
+            existingProduct.setPrice(price);
+
+            existingProduct.setImage(productDto.getImage());
+
+            CategoryDto categoryDto= productDto.getCategory();
+            Category category=null;
+
+            //check if the category already exist by name
+            if(categoryDto!=null && categoryDto.getName()!=null){
+                category=categoryRepository.findByName(categoryDto.getName());
+            }
+
+            //check if category doesn't exist create a new one
+            if(category==null){
+                category=new Category();
+                category.setName(categoryDto.getName());
+            }
+            //add the product to the category and set the category for the product
+            category.getProducts().add(existingProduct);
+            existingProduct.setCategory(category);
+
+            //save the updated product
+            existingProduct=productRepository.save(existingProduct);
+
+            return convertProductToGenericProductDto(existingProduct);
+        }
+        else{
+            throw new NotFoundException("Product with id"+ id+ " not found");
+        }
     }
 
+    @Transactional
     @Override
     public ProductDto deleteProduct(String id) throws NotFoundException {
-        return null;
+        Product product=productRepository.findById(UUID.fromString(id)).orElse(null);
+        if(product!=null){
+            productRepository.deleteById(UUID.fromString(id));
+            return convertProductToGenericProductDto(product);
+        }
+        else{
+            throw new NotFoundException("Product with id" +id+" not found");
+        }
     }
 }
