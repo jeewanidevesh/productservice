@@ -38,8 +38,8 @@ public interface ProductRepository
     List<Product> readAllByTitleLike(String titleRegex);
 
     List<Product> findAllByCategoryIn(List<Category> categories);
-//    @Query(value=CustomQueries.FIND_ALL_PRODUCT_BY_CATEGORY)
-//    List<Product> getAllProductsByCategory(String categoryName);
+    @Query(value = CustomQueries.FIND_ALL_PRODUCT_BY_CATEGORY)
+    List<Product> getAllProductByCategory(String categoryName);
 
     //    @Query("select Product from Product where  Product .category.uuid in:uuids")
 //    List<Product> findAllByCategoryIn(List<UUID> uuids);

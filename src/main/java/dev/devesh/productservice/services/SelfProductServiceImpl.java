@@ -102,15 +102,9 @@ public class SelfProductServiceImpl implements ProductServiceApis{
     }
 
     @Override
-    public List<ProductDto> getProductsByCategory(String categoryId) throws NotFoundException {
-        Optional<Category> categoryOptional=categoryRepository.findById(UUID.fromString(categoryId));
+    public List<ProductDto> getProductsByCategory(String categoryName) throws NotFoundException {
+        List<Product> products=productRepository.getAllProductByCategory(categoryName);
 
-        if(categoryOptional.isEmpty()){
-            return null;
-        }
-
-        Category category=categoryOptional.get();
-        List<ProductDto> productDtos=new ArrayList<>();
 
 
         return null;
