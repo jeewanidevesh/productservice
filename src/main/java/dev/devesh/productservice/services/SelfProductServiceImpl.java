@@ -21,7 +21,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-@Primary
 @Service("selfProductServiceImpl")
 public class SelfProductServiceImpl implements ProductServiceApis{
 
@@ -29,42 +28,42 @@ public class SelfProductServiceImpl implements ProductServiceApis{
     private CategoryRepository categoryRepository;
 
 
-    private ProductDto convertProductToGenericProductDto(Product product){
-        ProductDto productDto=new ProductDto();
-        productDto.setId(product.getUuid());
+    private GenericProductDto convertProductToGenericProductDto(Product product){
+        GenericProductDto productDto=new GenericProductDto();
+//        productDto.setId(product.getId());
         productDto.setTitle(product.getTitle());
         productDto.setDescription(product.getDescription());
         Price price=product.getPrice();
         productDto.setPrice(price.getPrice());
-        productDto.setCurrency(price.getCurrency());
+//        productDto.setCurrency(price.getCurrency());
         productDto.setImage(product.getImage());
         Category category=product.getCategory();
         List<Product> products=category.getProducts();
         CategoryDto categoryDto=new CategoryDto();
         categoryDto.setUuid(category.getUuid());
         categoryDto.setName(category.getName());
-        productDto.setCategory(categoryDto);
+        productDto.setCategory(category.getName());
 
         return productDto;
     }
 
-    private Product convertProductDtoToProduct(ProductDto productDto){
+    private Product convertProductDtoToProduct(GenericProductDto productDto){
         Product product=new Product();
         product.setTitle(productDto.getTitle());
         product.setDescription(productDto.getDescription());
         Price price=new Price();
         price.setPrice(productDto.getPrice());
-        price.setCurrency(productDto.getCurrency());
+        price.setCurrency("INR");
         product.setPrice(price);
         product.setImage(productDto.getImage());
-        CategoryDto categoryDto=productDto.getCategory();
+        String categoryDto=productDto.getCategory();
         Category category=null;
-        if(categoryDto!=null && categoryDto.getName()!=null){
-            category=categoryRepository.findByName(categoryDto.getName());
+        if(categoryDto!=null){
+            category=categoryRepository.findByName(categoryDto);
         }
         if(category==null){
             category=new Category();
-            category.setName(categoryDto.getName());
+            category.setName(categoryDto);
         }
 
         category.getProducts().add(product);
@@ -75,10 +74,10 @@ public class SelfProductServiceImpl implements ProductServiceApis{
 
 
     @Override
-    public List<ProductDto> getAllProducts() {
+    public List<GenericProductDto> getAllProducts() {
         List<Product> products=productRepository.findAll().stream()
                 .collect(Collectors.toList());
-        List<ProductDto> productDtos=new ArrayList<>();
+        List<GenericProductDto> productDtos=new ArrayList<>();
 
         for(Product product: products){
             productDtos.add(convertProductToGenericProductDto(product));
@@ -92,8 +91,8 @@ public class SelfProductServiceImpl implements ProductServiceApis{
     }
 
     @Override
-    public ProductDto getProductById(String id) throws NotFoundException {
-        Product product=productRepository.findById(UUID.fromString(id)).orElse(null);
+    public GenericProductDto getProductById(Long id) throws NotFoundException {
+        Product product=productRepository.findById(id).orElse(null);
         if(product!=null){
             return convertProductToGenericProductDto(product);
         }
@@ -103,7 +102,7 @@ public class SelfProductServiceImpl implements ProductServiceApis{
     }
     @Transactional
     @Override
-    public List<ProductDto> getProductsByCategory(String categoryName) throws NotFoundException {
+    public List<GenericProductDto> getProductsByCategory(String categoryName) throws NotFoundException {
         List<Product> products=productRepository.getAllProductByCategory(categoryName);
 
         if(products==null || products.isEmpty()){
@@ -114,7 +113,7 @@ public class SelfProductServiceImpl implements ProductServiceApis{
     }
 
     @Override
-    public ProductDto addonProduct(ProductDto productDto) {
+    public GenericProductDto createProduct(GenericProductDto productDto) {
         Product product=convertProductDtoToProduct(productDto);
         product=productRepository.save(product);
         return convertProductToGenericProductDto(product);
@@ -122,15 +121,15 @@ public class SelfProductServiceImpl implements ProductServiceApis{
 
     @Transactional
     @Override
-    public ProductDto updateProduct(ProductDto productDto, String id) throws NotFoundException {
+    public GenericProductDto updateProduct(GenericProductDto genericProductDto, Long id) throws NotFoundException {
         //retrieve the existing product by id
-        Optional<Product> optionalProduct=productRepository.findById(UUID.fromString(id));
+        Optional<Product> optionalProduct=productRepository.findById(id);
 
         if(optionalProduct.isPresent()){
             Product existingProduct=optionalProduct.get();
             //update the properties of product based on DTO
-            existingProduct.setTitle(productDto.getTitle());
-            existingProduct.setDescription(productDto.getDescription());
+            existingProduct.setTitle(genericProductDto.getTitle());
+            existingProduct.setDescription(genericProductDto.getDescription());
 
             //update the product price
             Price price=existingProduct.getPrice();
@@ -138,24 +137,24 @@ public class SelfProductServiceImpl implements ProductServiceApis{
             if(price==null){
                 price=new Price();
             }
-            price.setCurrency(productDto.getCurrency());
-            price.setPrice(productDto.getPrice());
+            price.setCurrency("INR");
+            price.setPrice(genericProductDto.getPrice());
             existingProduct.setPrice(price);
 
-            existingProduct.setImage(productDto.getImage());
+            existingProduct.setImage(genericProductDto.getImage());
 
-            CategoryDto categoryDto= productDto.getCategory();
+            String categoryDto= genericProductDto.getCategory();
             Category category=null;
 
             //check if the category already exist by name
-            if(categoryDto!=null && categoryDto.getName()!=null){
-                category=categoryRepository.findByName(categoryDto.getName());
+            if(categoryDto!=null ){
+                category=categoryRepository.findByName(categoryDto);
             }
 
             //check if category doesn't exist create a new one
             if(category==null){
                 category=new Category();
-                category.setName(categoryDto.getName());
+                category.setName(categoryDto);
             }
             //add the product to the category and set the category for the product
             category.getProducts().add(existingProduct);
@@ -173,10 +172,10 @@ public class SelfProductServiceImpl implements ProductServiceApis{
 
     @Transactional
     @Override
-    public ProductDto deleteProduct(String id) throws NotFoundException {
-        Product product=productRepository.findById(UUID.fromString(id)).orElse(null);
+    public GenericProductDto deleteProduct(Long id) throws NotFoundException {
+        Product product=productRepository.findById(id).orElse(null);
         if(product!=null){
-            productRepository.deleteById(UUID.fromString(id));
+            productRepository.deleteById(id);
             return convertProductToGenericProductDto(product);
         }
         else{

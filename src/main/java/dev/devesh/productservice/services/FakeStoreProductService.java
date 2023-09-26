@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Primary
+@Primary
 @Service("fakeStoreProductService")
 public class FakeStoreProductService implements ProductService{
 
@@ -60,7 +60,7 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public GenericProductDto updateProductById(Long id, GenericProductDto product) {
+    public GenericProductDto updateProduct(Long id, GenericProductDto product) {
         return convertFakeStoreProductIntoGenericProduct(fakeStoryProductServiceClient.updateProductById(id, product));
     }
 

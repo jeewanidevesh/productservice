@@ -9,17 +9,17 @@ import java.util.List;
 public interface ProductServiceApis {
 
     //getAllProducts
-    List<ProductDto>getAllProducts();
+    List<GenericProductDto>getAllProducts();
     //getAllCategories
     List<String> getAllCategories();
     //getProductById
-    ProductDto getProductById(String id) throws NotFoundException;
+    GenericProductDto getProductById(Long id) throws NotFoundException;
     //getProductByCategory
-    List<ProductDto> getProductsByCategory(String categoryId) throws NotFoundException;
+    List<GenericProductDto> getProductsByCategory(String categoryId) throws NotFoundException;
     //addonProduct
-    ProductDto addonProduct(ProductDto productDto);
+    GenericProductDto createProduct(GenericProductDto genericProductDto);
     //updateProduct
-    ProductDto updateProduct(ProductDto productDto , String id) throws NotFoundException;
+    GenericProductDto updateProduct(GenericProductDto genericProductDto , Long id) throws NotFoundException;
     //deleteProduct
-    ProductDto deleteProduct(String id) throws NotFoundException;
+    GenericProductDto deleteProduct(Long id) throws NotFoundException;
 }

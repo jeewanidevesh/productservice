@@ -4,6 +4,7 @@ import dev.devesh.productservice.dtos.ExceptionDto;
 import dev.devesh.productservice.dtos.GenericProductDto;
 import dev.devesh.productservice.exceptions.NotFoundException;
 import dev.devesh.productservice.services.ProductService;
+import dev.devesh.productservice.services.ProductServiceApis;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +18,14 @@ public class ProductController {
 
 //    @Autowired
     //field injection
-    private ProductService productService;
+    private ProductServiceApis productService;
 
     //constructor injection
 //    public ProductController(@Qualifier("fakeStoreProductService") ProductService productService){
 //        this.productService=productService;
 //    }
 
-    public ProductController(ProductService productService){
+    public ProductController(ProductServiceApis productService){
         this.productService=productService;
     }
 
@@ -75,9 +76,9 @@ public class ProductController {
     }
 
     @PutMapping("{id}")
-    public GenericProductDto updateProductById(@PathVariable("id")Long id,@RequestBody GenericProductDto product){
+    public GenericProductDto updateProductById(@PathVariable("id")Long id,@RequestBody GenericProductDto product) throws NotFoundException {
 
-        return productService.updateProductById(id, product);
+        return productService.updateProduct(product,id);
     }
 
 }

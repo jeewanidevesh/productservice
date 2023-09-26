@@ -1,5 +1,6 @@
 package dev.devesh.productservice.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dev.devesh.productservice.models.Price;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +9,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ProductDto {
 
     private UUID id;
