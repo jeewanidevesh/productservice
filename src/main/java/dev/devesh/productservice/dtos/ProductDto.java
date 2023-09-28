@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@JsonIgnoreProperties(ignoreUnknown = true)
+//@JsonIgnoreProperties(ignoreUnknown = true)
 public class ProductDto {
 
     private UUID id;

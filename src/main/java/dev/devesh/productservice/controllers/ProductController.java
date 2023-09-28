@@ -18,14 +18,14 @@ public class ProductController {
 
 //    @Autowired
     //field injection
-    private ProductServiceApis productService;
+    private ProductService productService;
 
     //constructor injection
 //    public ProductController(@Qualifier("fakeStoreProductService") ProductService productService){
 //        this.productService=productService;
 //    }
 
-    public ProductController(ProductServiceApis productService){
+    public ProductController(ProductService productService){
         this.productService=productService;
     }
 
@@ -78,7 +78,7 @@ public class ProductController {
     @PutMapping("{id}")
     public GenericProductDto updateProductById(@PathVariable("id")Long id,@RequestBody GenericProductDto product) throws NotFoundException {
 
-        return productService.updateProduct(product,id);
+        return productService.updateProduct(id,product);
     }
 
 }
