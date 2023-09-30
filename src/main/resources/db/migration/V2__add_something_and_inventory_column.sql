@@ -1,6 +1,0 @@
--- alter table products
--- add column inventory_count;
---
--- create table somethings(
---     id:
--- )

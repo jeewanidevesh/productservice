@@ -48,8 +48,13 @@ public class ProductController {
     //localhost:8080/products/123
     @GetMapping("{id}")
     public GenericProductDto getProductById(@PathVariable("id") Long id) throws NotFoundException {
+        GenericProductDto productDto=new GenericProductDto();
+        if(productDto==null){
+//            throw new NotFoundException( "not found this "+id);
+        }
 
-        return productService.getProductById(id);
+//        return productService.getProductById(id);
+        return productDto;
     }
 
     @DeleteMapping("{id}")
