@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -37,19 +38,44 @@ public class ProductController {
 
     //GET/products{}
     @GetMapping
-    public List<GenericProductDto> getAllProducts(){
+    public ResponseEntity<List<GenericProductDto>> getAllProducts() {
+        List<GenericProductDto> productDtos = productService.getAllProducts();
+        if (productDtos.isEmpty()) {
+            return new ResponseEntity<>(
+                    productDtos,
+                    HttpStatus.NOT_FOUND
+            );
+        }
 
-//        return List.of(new GenericProductDto(),
-//        new GenericProductDto());
+        List<GenericProductDto> genericProductDtos = new ArrayList<>();
 
-        return productService.getAllProducts();
+        for (GenericProductDto gpd: productDtos) {
+            genericProductDtos.add(gpd);
+        };
+
+//        genericProductDtos.remove(genericProductDtos.get(0));
+
+        return new ResponseEntity<>(genericProductDtos, HttpStatus.OK);
+
+//        productDtos.get(0).setId(1001L);
+//
+//        return new ResponseEntity<>(productDtos, HttpStatus.OK);
     }
+//    public List<GenericProductDto> getAllProducts(){
+//
+////        return List.of(new GenericProductDto(),
+////        new GenericProductDto());
+//
+//        return productService.getAllProducts();
+//    }
 
     //localhost:8080/products/123
     @GetMapping("{id}")
     public GenericProductDto getProductById(@PathVariable("id") Long id) throws NotFoundException {
-        GenericProductDto productDto=new GenericProductDto();
+        GenericProductDto productDto=productService.getProductById(id);
+//        GenericProductDto productDto=new GenericProductDto();
         if(productDto==null){
+            throw new NotFoundException("Product doesn't Exist");
 //            throw new NotFoundException( "not found this "+id);
         }
 
