@@ -8,14 +8,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.util.ArrayList;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.matches;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 // not initialize any unnecessary bean
@@ -62,6 +66,40 @@ public class ProductControllerWebMvcTest {
                 .andExpect(content().string(objectMapper.writeValueAsString(products)));
 
     }
+
+    @Test
+    void createProductShouldCreateANewProduct() throws Exception {
+
+        GenericProductDto productToCreate=new GenericProductDto();
+        productToCreate.setTitle("iPhone 15 Pro Max");
+        productToCreate.setImage("some image");
+        productToCreate.setCategory("mobile phones");
+        productToCreate.setDescription("Best iPhone Ever");
+
+
+        GenericProductDto expectedProduct= new GenericProductDto();
+        expectedProduct.setId(1001L);
+        expectedProduct.setTitle("iPhone 15 Pro Max");
+        expectedProduct.setImage("some image");
+        expectedProduct.setCategory("mobile phones");
+        expectedProduct.setDescription("Best iPhone Ever");
+
+        when(productService.createProduct(any()))
+                .thenReturn(expectedProduct);
+
+        mockMvc.perform(
+                post("/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productToCreate))
+        ).andExpect(
+                content().string(objectMapper.writeValueAsString(expectedProduct))
+        ).andExpect(
+                status().is(200)
+        );
+//                .andExpect((ResultMatcher) jsonPath("$.id", matches("1001")));
+    }
+
+
 
 }
 
