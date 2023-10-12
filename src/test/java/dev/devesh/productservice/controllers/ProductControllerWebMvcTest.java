@@ -14,8 +14,8 @@ import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.util.ArrayList;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.matches;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -95,13 +95,35 @@ public class ProductControllerWebMvcTest {
                 content().string(objectMapper.writeValueAsString(expectedProduct))
         ).andExpect(
                 status().is(200)
-        );
+        ).andExpect(jsonPath("$.student.name",is("Devesh")))
+                .andExpect(jsonPath("$.length()",is(2)));
 //                .andExpect((ResultMatcher) jsonPath("$.id", matches("1001")));
     }
 
 
 
 }
+//{
+//  student:{
+//      name:,
+//      email:,
+//      age:,
+// }
+
+
+//[
+//  {
+//      id:,
+//      name:,
+//      email:,
+//  },
+//  {
+//      id:,
+//      name:,
+//      email:,
+//  }
+//
+// ]
 
 // l1 -> [o1, o2, o3]
 
