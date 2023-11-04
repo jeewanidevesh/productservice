@@ -5,6 +5,7 @@ import dev.devesh.productservice.exceptions.NotFoundException;
 import dev.devesh.productservice.services.FakeStoreProductService;
 import dev.devesh.productservice.services.ProductService;
 import dev.devesh.productservice.thirdpartyclients.productsservice.fakestore.FakeStoryProductServiceClient;
+import org.apache.tomcat.util.json.Token;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -63,7 +64,7 @@ public class ProductControllerTest {
     void returnsSameProductAsServiceWhenProductExists() throws NotFoundException {
         GenericProductDto genericProductDto=new GenericProductDto();
         when(
-                productService.getProductById(any(Long.class))
+                productService.getProductById(any(Long.class),1234L)
         )
                 .thenReturn(genericProductDto);
 
@@ -75,7 +76,7 @@ public class ProductControllerTest {
     @Test
     void throwsExceptionWhenProductDoesntExist() throws NotFoundException {
         when(
-                productService.getProductById(any(Long.class))
+                productService.getProductById(any(Long.class),1234L)
         )
                 .thenReturn(null);
 
@@ -88,7 +89,7 @@ public class ProductControllerTest {
         genericProductDto.setTitle("Devesh");
 
         when(
-                productService.getProductById(1L)
+                productService.getProductById(1L,1234L)
         ).thenReturn(genericProductDto);
 
         GenericProductDto genericProductDto1=productController.getProductById("abcd",1L);
@@ -135,7 +136,7 @@ public class ProductControllerTest {
     void productControllerCallsProductServiceWithSameProductId() throws NotFoundException {
         Long id=101L;
 
-        when(productService.getProductById(id))
+        when(productService.getProductById(id,1234L))
                 .thenCallRealMethod();
 
         when(fakeStoryProductServiceClient.getProductById(101L))
