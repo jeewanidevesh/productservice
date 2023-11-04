@@ -1,6 +1,7 @@
 package dev.devesh.productservice.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import dev.devesh.productservice.security.JwtObject;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,4 +16,5 @@ public class CategoryDto {
     private UUID uuid;
     private String name;
     private List<ProductDto> products;
+    private JwtObject jwtObject;
 }

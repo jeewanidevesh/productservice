@@ -3,15 +3,22 @@ package dev.devesh.productservice.controllers;
 import dev.devesh.productservice.dtos.ExceptionDto;
 import dev.devesh.productservice.dtos.GenericProductDto;
 import dev.devesh.productservice.exceptions.NotFoundException;
+import dev.devesh.productservice.security.JwtObject;
+import dev.devesh.productservice.security.TokenValidator;
 import dev.devesh.productservice.services.ProductService;
 import dev.devesh.productservice.services.ProductServiceApis;
+import jakarta.annotation.Nullable;
+import jakarta.servlet.http.HttpServletRequest;
+import org.antlr.v4.runtime.Token;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
@@ -20,14 +27,16 @@ public class ProductController {
 //    @Autowired
     //field injection
     private ProductService productService;
+    private TokenValidator tokenValidator;
 
     //constructor injection
 //    public ProductController(@Qualifier("fakeStoreProductService") ProductService productService){
 //        this.productService=productService;
 //    }
 
-    public ProductController(ProductService productService){
+    public ProductController(ProductService productService,TokenValidator tokenValidator){
         this.productService=productService;
+        this.tokenValidator=tokenValidator;
     }
 
     //setter injection
@@ -71,8 +80,25 @@ public class ProductController {
 
     //localhost:8080/products/123
     @GetMapping("{id}")
-    public GenericProductDto getProductById(@PathVariable("id") Long id) throws NotFoundException {
-        GenericProductDto productDto=productService.getProductById(id);
+    //authorization
+    public GenericProductDto getProductById(@Nullable @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken, @PathVariable("id") Long id) throws NotFoundException {
+
+        //put this in method signature "HttpServletRequest request" for implementation
+//        request.getRemoteAddr();
+        System.out.println(authToken);
+
+        Optional<JwtObject> authTokenObjOptional;
+        JwtObject authTokenObj=null;
+
+        if(authToken!=null){
+            authTokenObjOptional=tokenValidator.validateToken(authToken);
+            if(authTokenObjOptional.isEmpty()){
+                //ignore
+            }
+            authTokenObj=authTokenObjOptional.get();
+        }
+
+        GenericProductDto productDto=productService.getProductById(id, authTokenObj.getUserId());
 //        GenericProductDto productDto=new GenericProductDto();
         if(productDto==null){
             throw new NotFoundException("Product doesn't Exist");

@@ -9,6 +9,7 @@ import dev.devesh.productservice.models.Price;
 import dev.devesh.productservice.models.Product;
 import dev.devesh.productservice.repositories.CategoryRepository;
 import dev.devesh.productservice.repositories.ProductRepository;
+import dev.devesh.productservice.security.JwtObject;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
@@ -91,7 +92,18 @@ public class SelfProductServiceImpl implements ProductServiceApis{
     }
 
     @Override
-    public GenericProductDto getProductById(Long id) throws NotFoundException {
+    public GenericProductDto getProductById(Long id,Long userIdTryingToAccess) throws NotFoundException {
+        System.out.println("In product service");
+
+        //Product product=ProductRepositry.getProductByID(id);
+        //if(product.getStatus().equals.(PRIVATE)){
+        //      if(userIdTryingToAccess.equals(product.getCreatorId()){
+        //          return product;
+        //      }
+        // return null;
+        //}
+        //return product;
+
         Product product=productRepository.findById(id).orElse(null);
         if(product!=null){
             return convertProductToGenericProductDto(product);
