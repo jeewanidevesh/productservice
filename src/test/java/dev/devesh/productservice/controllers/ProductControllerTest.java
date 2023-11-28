@@ -64,11 +64,11 @@ public class ProductControllerTest {
     void returnsSameProductAsServiceWhenProductExists() throws NotFoundException {
         GenericProductDto genericProductDto=new GenericProductDto();
         when(
-                productService.getProductById(any(Long.class),1234L)
+                productService.getProductById(1234L)
         )
                 .thenReturn(genericProductDto);
 
-        assertEquals(genericProductDto.getPrice(),productController.getProductById("abcd",123L).getPrice());
+        assertEquals(genericProductDto.getPrice(),productController.getProductById(123L).getPrice());
 
 //        assertThrows(NotFoundException.class,()->productController.getProductById(123L));
     }
@@ -76,11 +76,11 @@ public class ProductControllerTest {
     @Test
     void throwsExceptionWhenProductDoesntExist() throws NotFoundException {
         when(
-                productService.getProductById(any(Long.class),1234L)
+                productService.getProductById(any(Long.class))
         )
                 .thenReturn(null);
 
-        assertThrows(NotFoundException.class,()->productController.getProductById("abcd",123L));
+        assertThrows(NotFoundException.class,()->productController.getProductById(123L));
     }
 
     @Test
@@ -89,10 +89,10 @@ public class ProductControllerTest {
         genericProductDto.setTitle("Devesh");
 
         when(
-                productService.getProductById(1L,1234L)
+                productService.getProductById(1L)
         ).thenReturn(genericProductDto);
 
-        GenericProductDto genericProductDto1=productController.getProductById("abcd",1L);
+        GenericProductDto genericProductDto1=productController.getProductById(1L);
         assertEquals("Devesh",genericProductDto1.getTitle());
     }
 
@@ -136,7 +136,7 @@ public class ProductControllerTest {
     void productControllerCallsProductServiceWithSameProductId() throws NotFoundException {
         Long id=101L;
 
-        when(productService.getProductById(id,1234L))
+        when(productService.getProductById(id))
                 .thenCallRealMethod();
 
         when(fakeStoryProductServiceClient.getProductById(101L))

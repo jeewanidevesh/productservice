@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface ProductService {
 
     GenericProductDto createProduct(GenericProductDto product);
-    GenericProductDto getProductById(Long id, Long userIdTryingToAccess) throws NotFoundException;
+    GenericProductDto getProductById(Long id) throws NotFoundException;
     List<GenericProductDto> getAllProducts();
     GenericProductDto deleteProduct(Long id) throws NotFoundException;
 

@@ -14,7 +14,7 @@ public interface ProductServiceApis {
     //getAllCategories
     List<String> getAllCategories();
     //getProductById
-    GenericProductDto getProductById(Long id, Long userIdTryingToAccess) throws NotFoundException;
+    GenericProductDto getProductById(Long id) throws NotFoundException;
     //getProductByCategory
     List<GenericProductDto> getProductsByCategory(String categoryId) throws NotFoundException;
     //addonProduct
